@@ -1,5 +1,5 @@
 baseurl: https://1368129224.github.io/blog/
-languageCode: en-us
+languageCode: zh-cn
 theme: hugo-theme-stack
 paginate: 5
 title: 新泽雪冬
@@ -7,7 +7,7 @@ title: 新泽雪冬
 languages:
     cn:
         languageName: 中文
-        title: 演示站点
+        title: 新泽雪冬
         weight: 2
 
 # Change it to your Disqus shortname before using
@@ -18,7 +18,7 @@ googleAnalytics:
 
 # Theme i18n support
 # Available values: en, fr, id, ja, ko, pt-br, zh-cn, zh-tw, es, de, nl, it, th, el, uk, ar
-DefaultContentLanguage: zh-cn
+DefaultContentLanguage: cn
 
 # Set hasCJKLanguage to true if DefaultContentLanguage is in [zh-cn ja ko]
 # This will make .Summary and .WordCount behave correctly for CJK languages.
@@ -36,7 +36,7 @@ params:
     favicon:
 
     footer:
-        since: 2020
+        since: 2022
         customText:
 
     dateFormat:
@@ -45,7 +45,7 @@ params:
 
     sidebar:
         emoji: 🍥
-        subtitle: 认清现实吗，放弃幻想。
+        subtitle: 认清现实，放弃幻想。
         avatar:
             enabled: true
             local: true
