@@ -1,4 +1,4 @@
-baseurl: https://blog.zooter.com.cn/blog/
+baseurl: https://blog.zooter.com.cn/
 languageCode: zh-cn
 theme: hugo-theme-stack
 paginate: 5
@@ -30,7 +30,7 @@ permalinks:
 
 params:
     mainSections:
-        - post
+        - posts
     featuredImageField: image
     rssFullContent: true
     favicon:
