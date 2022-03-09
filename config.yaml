@@ -71,6 +71,7 @@ params:
     widgets:
         homepage:
             - type: search
+            - type: about
             - type: archives
               params:
                   limit: 5
@@ -113,13 +114,8 @@ params:
 ### See https://docs.stack.jimmycai.com/configuration/custom-menu.html
 ### To remove about, archive and search page menu item, remove `menu` field from their FrontMatter
 menu:
-    main:
-        - identifier: home
-          name: Home
-          url: /
-          params:
-              newTab: false
-              icon: home
+    main: []
+
     social:
         - identifier: github
           name: GitHub

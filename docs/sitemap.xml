@@ -26,6 +26,12 @@
     <loc>https://blog.zooter.com.cn/posts/test-chinese/</loc>
     <lastmod>2020-09-09T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://blog.zooter.com.cn/tags/tag/</loc>
+    <lastmod>2020-09-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.zooter.com.cn/tags/</loc>
+    <lastmod>2020-09-09T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://blog.zooter.com.cn/categories/test/</loc>
     <lastmod>2020-09-09T00:00:00+00:00</lastmod>
   </url><url>
@@ -33,72 +39,19 @@
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://blog.zooter.com.cn/page/</loc>
-    <lastmod>2019-05-28T00:00:00+00:00</lastmod>
+    <lastmod>2020-10-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://blog.zooter.com.cn/tags/css/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/html/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/markdown/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/posts/markdown-syntax/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/categories/syntax/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/themes/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/categories/themes/</loc>
-    <lastmod>2019-03-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/privacy/</loc>
+    <loc>https://blog.zooter.com.cn/tags/hugo/</loc>
     <lastmod>2019-03-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://blog.zooter.com.cn/posts/rich-content/</loc>
     <lastmod>2019-03-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://blog.zooter.com.cn/tags/shortcodes/</loc>
-    <lastmod>2019-03-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/categories/%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9/</loc>
-    <lastmod>2019-03-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/categories/%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9-%D9%85%D8%B9-%D9%81%D8%B1%D8%A7%D8%BA%D8%A7%D8%AA/</loc>
-    <lastmod>2019-03-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/%D9%85%D8%A7%D8%B1%D9%83%D8%AF%D8%A7%D9%88%D9%86/</loc>
-    <lastmod>2019-03-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/posts/placeholder-text/</loc>
-    <lastmod>2019-03-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/%D9%86%D8%B5/</loc>
-    <lastmod>2019-03-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/%D9%88%D8%B3%D9%85-%D9%85%D8%B9-%D9%81%D8%B1%D8%A7%D8%BA%D8%A7%D8%AA/</loc>
-    <lastmod>2019-03-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/posts/math-typesetting/</loc>
-    <lastmod>2019-03-08T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/tags/emoji/</loc>
-    <lastmod>2019-03-05T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/posts/emoji-support/</loc>
-    <lastmod>2019-03-05T00:00:00+00:00</lastmod>
+    <loc>https://blog.zooter.com.cn/about/</loc>
+    <lastmod>2020-10-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://blog.zooter.com.cn/links/</loc>
   </url><url>
     <loc>https://blog.zooter.com.cn/search/</loc>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/%E5%85%B3%E4%BA%8E/</loc>
   </url>
 </urlset>
