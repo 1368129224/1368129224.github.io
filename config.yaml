@@ -1,4 +1,4 @@
-baseurl: https://blog.zooter.com.cn/
+baseurl: https://blog.zooter.com.cn
 languageCode: zh-cn
 theme: hugo-theme-stack
 paginate: 10
@@ -74,9 +74,9 @@ params:
             - type: archives
               params:
                   limit: 5
-#            - type: categories
-#              params:
-#                  limit: 10
+            - type: categories
+              params:
+                  limit: 10
             - type: tag-cloud
               params:
                   limit: 10
@@ -85,10 +85,10 @@ params:
 
     opengraph:
         github:
-            site: https://github.com/1368129224
+            site: 
             
             # Available values: summary, summary_large_image
-#            card: summary
+            card: summary
 
     defaultImage:
         opengraph:
@@ -113,13 +113,12 @@ params:
 ### See https://docs.stack.jimmycai.com/configuration/custom-menu.html
 ### To remove about, archive and search page menu item, remove `menu` field from their FrontMatter
 menu:
-    main: []
-
-    about:
+    main:
         - identifier: home
           name: Home
-          url: https://github.com/1368129224
+          url: /
           params:
+              newTab: false
               icon: home
     social:
         - identifier: github
@@ -127,6 +126,7 @@ menu:
           url: https://github.com/1368129224
           params:
               icon: brand-github
+
         - identifier: twitter
           name: Twitter
           url: https://github.com/136812922222
