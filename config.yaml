@@ -115,12 +115,23 @@ params:
 menu:
     main: []
 
+    about:
+        - identifier: home
+          name: Home
+          url: https://github.com/1368129224
+          params:
+              icon: home
     social:
         - identifier: github
           name: GitHub
           url: https://github.com/1368129224
           params:
               icon: brand-github
+        - identifier: twitter
+          name: Twitter
+          url: https://github.com/136812922222
+          params:
+              icon: brand-twitter
 
 related:
     includeNewer: true
