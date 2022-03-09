@@ -33,7 +33,7 @@ params:
         - posts
     featuredImageField: image
     rssFullContent: true
-    favicon:
+    favicon: 
 
     footer:
         since: 2022
@@ -63,80 +63,11 @@ params:
         enabled: true
         provider: utterances
 
-        disqusjs:
-            shortname:
-            apiUrl:
-            apiKey:
-            admin:
-            adminLabel:
-
         utterances:
             repo: 1368129224/blog
             issueTerm: pathname
             label: github-light
 
-        remark42:
-            host:
-            site:
-            locale:
-
-        vssue:
-            platform:
-            owner:
-            repo:
-            clientId:
-            clientSecret:
-            autoCreateIssue: false
-
-        # Waline client configuration see: https://waline.js.org/en/reference/client.html
-        waline:
-            serverURL:
-            lang:
-            visitor:
-            avatar:
-            emoji:
-                - https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo
-            requiredMeta:
-                - name
-                - email
-                - url
-            placeholder:
-            locale:
-                admin: Admin
-
-        twikoo:
-            envId:
-            region:
-            path:
-            lang:
-
-        # See https://cactus.chat/docs/reference/web-client/#configuration for description of the various options
-        cactus:
-            defaultHomeserverUrl: "https://matrix.cactus.chat:8448"
-            serverName: "cactus.chat"
-            siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
-
-        giscus:
-            repo:
-            repoID:
-            category:
-            categoryID:
-            mapping:
-            lightTheme:
-            darkTheme:
-            reactionsEnabled: 1
-            emitMetadata: 0
-
-        gitalk:
-            owner:
-            admin:
-            repo:
-            clientID:
-            clientSecret:
-
-        cusdis:
-            host:
-            id:
     widgets:
         homepage:
             - type: search
@@ -146,9 +77,9 @@ params:
 #            - type: categories
 #              params:
 #                  limit: 10
-#            - type: tag-cloud
-#              params:
-#                  limit: 10
+            - type: tag-cloud
+              params:
+                  limit: 10
         page:
             - type: toc
 
@@ -157,7 +88,7 @@ params:
             site: https://github.com/1368129224
             
             # Available values: summary, summary_large_image
-            card: summary
+#            card: summary
 
     defaultImage:
         opengraph:
@@ -167,10 +98,10 @@ params:
 
     colorScheme:
         # Display toggle
-        toggle: true
+        toggle: false
 
         # Available values: auto, light, dark
-        default: auto
+        default: light
 
     imageProcessing:
         cover:
