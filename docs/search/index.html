@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='认清现实，放弃幻想。'><title>404 Page not found</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=''><title>搜索</title>
 
-<link rel='canonical' href='https://blog.zooter.com.cn/404.html'>
+<link rel='canonical' href='https://blog.zooter.com.cn/search/'>
 
-<link rel="stylesheet" href="/scss/style.min.b80bf249ce4a22cf55e8d7340a0b37a2f2c10f54f3a9a49cb94b694a2eb0bbea.css"><meta property='og:title' content='404 Page not found'>
-<meta property='og:description' content='认清现实，放弃幻想。'>
-<meta property='og:url' content='https://blog.zooter.com.cn/404.html'>
+<link rel="stylesheet" href="/scss/style.min.b80bf249ce4a22cf55e8d7340a0b37a2f2c10f54f3a9a49cb94b694a2eb0bbea.css"><meta property='og:title' content='搜索'>
+<meta property='og:description' content=''>
+<meta property='og:url' content='https://blog.zooter.com.cn/search/'>
 <meta property='og:site_name' content='新泽雪冬'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2022-03-09T00:12:10-08:00 '/><meta property='og:image' content='https://blog.zooter.com.cn/img/bg.jpg' />
-<meta name="twitter:title" content="404 Page not found">
-<meta name="twitter:description" content="认清现实，放弃幻想。"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://blog.zooter.com.cn/img/bg.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Page' /><meta property='og:image' content='https://blog.zooter.com.cn/img/bg.jpg' />
+<meta name="twitter:title" content="搜索">
+<meta name="twitter:description" content=""><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://blog.zooter.com.cn/img/bg.jpg' /><link rel="alternate" type="application/json" href="https://blog.zooter.com.cn/search/index.json"><link rel="preload" href="https://blog.zooter.com.cn/search/index.json" as="fetch" crossorigin="anonymous">
     </head>
-    <body class="">
+    <body class="template-search">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -175,7 +175,7 @@
         
         
 
-        <li >
+        <li  class='current' >
             <a href='/search/' >
                 
                 
@@ -219,11 +219,34 @@
     </ol>
 </aside>
 <main class="main full-width">
-    <div class="not-found-card">
-        <h1 class="article-title">404 错误</h1>
-        <h2 class="article-subtitle">页面不存在</h2>
-    </div>
-    <footer class="site-footer">
+<form action="https://blog.zooter.com.cn/search/" class="search-form"data-json="https://blog.zooter.com.cn/search/index.json">
+    <p>
+        <label>搜索</label>
+        <input name="keyword" placeholder="输入关键词..." />
+    </p>
+
+    <button title="搜索">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+    </button>
+</form>
+
+<div class="search-result">
+    <h3 class="search-result--title section-title"></h3>
+    <div class="search-result--list article-list--compact"></div>
+</div>
+
+<script>
+    window.searchResultTitleTemplate = "#PAGES_COUNT 个结果 （用时 #TIME_SECONDS 秒）"
+</script><script type="text/javascript" src="/ts/search.js" defer></script>
+
+<footer class="site-footer">
     <section class="copyright">
         &copy; 
         
