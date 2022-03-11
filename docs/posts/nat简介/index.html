@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='1. 简介 网络地址转换，可以解决IPv4地址匮乏的问题，同时带有过滤的功能(防火墙)。
+PS：在IPv4时代NAT是非常受欢迎的，但随着IPv6的来临，应尽量避免使用NAT，所需的安全(防火墙)等功能应采取其他措施解决。
+2. 术语 2.1 内部Tuple 指内部主机的私有地址和端口号所构成的二元组，即内部主机所发送报文的源地址、端口所构成的二元组。
+2.2 外部Tuple 指内部Tuple经过NAT的源地址/端口转换之后，所获得的外部地址、端口所构成的二元组，即外部主机收到经NAT转换之后的报文时，它所看到的该报文的源地址（通常是NAT设备的地址）和源端口。
+2.3 目标Tuple 指外部主机的地址、端口所构成的二元组，即内部主机所发送报文的目标地址、端口所构成的二元组。
+2.4 Basic NAT（基本NAT） 只进行IP地址转换。在这种模式下，多台内部主机访问外部网络需要同等数量的公网IP地址，即需要一定数量的NAT地址池。
+2.5 NATP（网络地址-端口转换） NATP是在狭义NAT的基础上增加对端口的转换。这种模式下多台内部主机可经由一个公网IP地址访问外部网络，目前家用宽带主要的NAT模式。
+3. NAT的类型 3.1 Full Cone NAT（锥形NAT） 所有来自同一 个内部Tuple X的请求均被NAT转换至同一个外部Tuple Y，而不管这些请求是不是属于同一个应用或者是多个应用的。除此之外，当X-Y的转换关系建立之后，任意外部主机均可随时将Y中的地址和端口作为目标地址和目标端口，向内部主机发送UDP报文，由于对外部请求的来源无任何限制，因此这种方式虽然足够简单，但却不那么安全。（任意的外部主机/port都能和先前内部节点被映射的外部Tuple进行通信）
+3.2 Restricted Cone NAT（受限的锥形NAT） 它是Full Cone的受限版本：所有来自同一个内部Tuple X的请求均被NAT转换至同一个外部Tuple Y，这与Full Cone相同，但不同的是，只有当内部主机曾经发送过报文给外部主机（假设其IP地址为Z）后，外部主机才能以Y中的信息作为目标地址和目标端口，向内部主机发送UDP请求报文，这意味着，NAT设备只向内转发（目标地址/端口转换）那些来自于当前已知的外部主机的UDP报文，从而保障了外部请求来源的安全性。（IP相同，port随便，就能和先前内部节点被映射的外部Tuple进行通信）
+3.3 Port Restricted Cone NAT（严格限制的锥形NAT） 它是Restricted Cone NAT的进一步受限版。只有当内部主机曾经发送过报文给外部主机（假设其IP地址为Z且端口为P）之后，外部主机才能以Y中的信息作为目标地址和目标端 口，向内部主机发送UDP报文，同时，其请求报文的源端口必须为P，这一要求进一步强化了对外部报文请求来源的限制，从而较Restrictd Cone更具安全性 （ip,port都得一样；只能用先前内部节点被映射的外部Tuple与内部节点进行通信））
+3.4 Symmetric NAT（对称NAT） 在Cone NAT中，NAT转换映射关系仅与内部Tuple和外部Tuple相关，与目标Tuple无关。而在Symmetric NAT中，即使内部Tuple和外部Tuple相同，但目标Tuple不同，在此情况下将建立两条转换映射关系。此外，NAT的过滤方式与Port Restricted Cone相同。
+ NAT的四种类型及类型检测 - bw_0927 - 博客园'><title>NAT简介</title>
+
+<link rel='canonical' href='https://blog.zooter.com.cn/posts/nat%E7%AE%80%E4%BB%8B/'>
+
+<link rel="stylesheet" href="/scss/style.min.b80bf249ce4a22cf55e8d7340a0b37a2f2c10f54f3a9a49cb94b694a2eb0bbea.css"><meta property='og:title' content='NAT简介'>
+<meta property='og:description' content='1. 简介 网络地址转换，可以解决IPv4地址匮乏的问题，同时带有过滤的功能(防火墙)。
+PS：在IPv4时代NAT是非常受欢迎的，但随着IPv6的来临，应尽量避免使用NAT，所需的安全(防火墙)等功能应采取其他措施解决。
+2. 术语 2.1 内部Tuple 指内部主机的私有地址和端口号所构成的二元组，即内部主机所发送报文的源地址、端口所构成的二元组。
+2.2 外部Tuple 指内部Tuple经过NAT的源地址/端口转换之后，所获得的外部地址、端口所构成的二元组，即外部主机收到经NAT转换之后的报文时，它所看到的该报文的源地址（通常是NAT设备的地址）和源端口。
+2.3 目标Tuple 指外部主机的地址、端口所构成的二元组，即内部主机所发送报文的目标地址、端口所构成的二元组。
+2.4 Basic NAT（基本NAT） 只进行IP地址转换。在这种模式下，多台内部主机访问外部网络需要同等数量的公网IP地址，即需要一定数量的NAT地址池。
+2.5 NATP（网络地址-端口转换） NATP是在狭义NAT的基础上增加对端口的转换。这种模式下多台内部主机可经由一个公网IP地址访问外部网络，目前家用宽带主要的NAT模式。
+3. NAT的类型 3.1 Full Cone NAT（锥形NAT） 所有来自同一 个内部Tuple X的请求均被NAT转换至同一个外部Tuple Y，而不管这些请求是不是属于同一个应用或者是多个应用的。除此之外，当X-Y的转换关系建立之后，任意外部主机均可随时将Y中的地址和端口作为目标地址和目标端口，向内部主机发送UDP报文，由于对外部请求的来源无任何限制，因此这种方式虽然足够简单，但却不那么安全。（任意的外部主机/port都能和先前内部节点被映射的外部Tuple进行通信）
+3.2 Restricted Cone NAT（受限的锥形NAT） 它是Full Cone的受限版本：所有来自同一个内部Tuple X的请求均被NAT转换至同一个外部Tuple Y，这与Full Cone相同，但不同的是，只有当内部主机曾经发送过报文给外部主机（假设其IP地址为Z）后，外部主机才能以Y中的信息作为目标地址和目标端口，向内部主机发送UDP请求报文，这意味着，NAT设备只向内转发（目标地址/端口转换）那些来自于当前已知的外部主机的UDP报文，从而保障了外部请求来源的安全性。（IP相同，port随便，就能和先前内部节点被映射的外部Tuple进行通信）
+3.3 Port Restricted Cone NAT（严格限制的锥形NAT） 它是Restricted Cone NAT的进一步受限版。只有当内部主机曾经发送过报文给外部主机（假设其IP地址为Z且端口为P）之后，外部主机才能以Y中的信息作为目标地址和目标端 口，向内部主机发送UDP报文，同时，其请求报文的源端口必须为P，这一要求进一步强化了对外部报文请求来源的限制，从而较Restrictd Cone更具安全性 （ip,port都得一样；只能用先前内部节点被映射的外部Tuple与内部节点进行通信））
+3.4 Symmetric NAT（对称NAT） 在Cone NAT中，NAT转换映射关系仅与内部Tuple和外部Tuple相关，与目标Tuple无关。而在Symmetric NAT中，即使内部Tuple和外部Tuple相同，但目标Tuple不同，在此情况下将建立两条转换映射关系。此外，NAT的过滤方式与Port Restricted Cone相同。
+ NAT的四种类型及类型检测 - bw_0927 - 博客园'>
+<meta property='og:url' content='https://blog.zooter.com.cn/posts/nat%E7%AE%80%E4%BB%8B/'>
+<meta property='og:site_name' content='新泽雪冬'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='NAT' /><meta property='article:published_time' content='2022-03-11T00:03:02-08:00'/><meta property='article:modified_time' content='2022-03-11T00:03:02-08:00'/><meta property='og:image' content='https://blog.zooter.com.cn/img/bg.jpg' />
+<meta name="twitter:title" content="NAT简介">
+<meta name="twitter:description" content="1. 简介 网络地址转换，可以解决IPv4地址匮乏的问题，同时带有过滤的功能(防火墙)。
+PS：在IPv4时代NAT是非常受欢迎的，但随着IPv6的来临，应尽量避免使用NAT，所需的安全(防火墙)等功能应采取其他措施解决。
+2. 术语 2.1 内部Tuple 指内部主机的私有地址和端口号所构成的二元组，即内部主机所发送报文的源地址、端口所构成的二元组。
+2.2 外部Tuple 指内部Tuple经过NAT的源地址/端口转换之后，所获得的外部地址、端口所构成的二元组，即外部主机收到经NAT转换之后的报文时，它所看到的该报文的源地址（通常是NAT设备的地址）和源端口。
+2.3 目标Tuple 指外部主机的地址、端口所构成的二元组，即内部主机所发送报文的目标地址、端口所构成的二元组。
+2.4 Basic NAT（基本NAT） 只进行IP地址转换。在这种模式下，多台内部主机访问外部网络需要同等数量的公网IP地址，即需要一定数量的NAT地址池。
+2.5 NATP（网络地址-端口转换） NATP是在狭义NAT的基础上增加对端口的转换。这种模式下多台内部主机可经由一个公网IP地址访问外部网络，目前家用宽带主要的NAT模式。
+3. NAT的类型 3.1 Full Cone NAT（锥形NAT） 所有来自同一 个内部Tuple X的请求均被NAT转换至同一个外部Tuple Y，而不管这些请求是不是属于同一个应用或者是多个应用的。除此之外，当X-Y的转换关系建立之后，任意外部主机均可随时将Y中的地址和端口作为目标地址和目标端口，向内部主机发送UDP报文，由于对外部请求的来源无任何限制，因此这种方式虽然足够简单，但却不那么安全。（任意的外部主机/port都能和先前内部节点被映射的外部Tuple进行通信）
+3.2 Restricted Cone NAT（受限的锥形NAT） 它是Full Cone的受限版本：所有来自同一个内部Tuple X的请求均被NAT转换至同一个外部Tuple Y，这与Full Cone相同，但不同的是，只有当内部主机曾经发送过报文给外部主机（假设其IP地址为Z）后，外部主机才能以Y中的信息作为目标地址和目标端口，向内部主机发送UDP请求报文，这意味着，NAT设备只向内转发（目标地址/端口转换）那些来自于当前已知的外部主机的UDP报文，从而保障了外部请求来源的安全性。（IP相同，port随便，就能和先前内部节点被映射的外部Tuple进行通信）
+3.3 Port Restricted Cone NAT（严格限制的锥形NAT） 它是Restricted Cone NAT的进一步受限版。只有当内部主机曾经发送过报文给外部主机（假设其IP地址为Z且端口为P）之后，外部主机才能以Y中的信息作为目标地址和目标端 口，向内部主机发送UDP报文，同时，其请求报文的源端口必须为P，这一要求进一步强化了对外部报文请求来源的限制，从而较Restrictd Cone更具安全性 （ip,port都得一样；只能用先前内部节点被映射的外部Tuple与内部节点进行通信））
+3.4 Symmetric NAT（对称NAT） 在Cone NAT中，NAT转换映射关系仅与内部Tuple和外部Tuple相关，与目标Tuple无关。而在Symmetric NAT中，即使内部Tuple和外部Tuple相同，但目标Tuple不同，在此情况下将建立两条转换映射关系。此外，NAT的过滤方式与Port Restricted Cone相同。
+ NAT的四种类型及类型检测 - bw_0927 - 博客园"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://blog.zooter.com.cn/img/bg.jpg' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-130410247-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-130410247-1');
+</script>
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "light");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu194a4ecf12a7b93a64a6cdaa7d7cb00e_36749_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">新泽雪冬</a></h1>
+            <h2 class="site-description">认清现实，放弃幻想。</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/1368129224'
+                        target="_blank"
+                        title="GitHub"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+        </div>
+    </ol>
+</aside>
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E7%BD%91%E7%BB%9C/" style="background-color: #2a9d8f; color: #fff;">
+                网络
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/nat%E7%AE%80%E4%BB%8B/">NAT简介</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 11, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="1-简介">1. 简介</h1>
+<p>网络地址转换，可以解决IPv4地址匮乏的问题，同时带有过滤的功能(防火墙)。</p>
+<p>PS：在IPv4时代NAT是非常受欢迎的，但随着IPv6的来临，应尽量避免使用NAT，所需的安全(防火墙)等功能应采取其他措施解决。</p>
+<h1 id="2-术语">2. 术语</h1>
+<h2 id="21-内部tuple">2.1 内部Tuple</h2>
+<p>指内部主机的私有地址和端口号所构成的二元组，即内部主机所发送报文的源地址、端口所构成的二元组。</p>
+<h2 id="22-外部tuple">2.2 外部Tuple</h2>
+<p>指内部Tuple经过NAT的源地址/端口转换之后，所获得的外部地址、端口所构成的二元组，即外部主机收到经NAT转换之后的报文时，它所看到的该报文的源地址（通常是NAT设备的地址）和源端口。</p>
+<h2 id="23-目标tuple">2.3 目标Tuple</h2>
+<p>指外部主机的地址、端口所构成的二元组，即内部主机所发送报文的目标地址、端口所构成的二元组。</p>
+<h2 id="24-basic-nat基本nat">2.4 Basic NAT（基本NAT）</h2>
+<p>只进行IP地址转换。在这种模式下，多台内部主机访问外部网络需要同等数量的公网IP地址，即需要一定数量的NAT地址池。</p>
+<h2 id="25-natp网络地址-端口转换">2.5 NATP（网络地址-端口转换）</h2>
+<p>NATP是在狭义NAT的基础上增加对端口的转换。这种模式下多台内部主机可经由一个公网IP地址访问外部网络，目前家用宽带主要的NAT模式。</p>
+<h1 id="3-nat的类型">3. NAT的类型</h1>
+<h2 id="31-full-cone-nat锥形nat">3.1 Full Cone NAT（锥形NAT）</h2>
+<p>所有来自同一 个内部Tuple X的请求均被NAT转换至同一个外部Tuple Y，而不管这些请求是不是属于同一个应用或者是多个应用的。除此之外，当X-Y的转换关系建立之后，任意外部主机均可随时将Y中的地址和端口作为目标地址和目标端口，向内部主机发送UDP报文，由于对外部请求的来源无任何限制，因此这种方式虽然足够简单，但却不那么安全。（任意的外部主机/port都能和先前内部节点被映射的外部Tuple进行通信）</p>
+<h2 id="32-restricted-cone-nat受限的锥形nat">3.2 Restricted Cone NAT（受限的锥形NAT）</h2>
+<p>它是Full Cone的受限版本：所有来自同一个内部Tuple X的请求均被NAT转换至同一个外部Tuple Y，这与Full Cone相同，但不同的是，只有当内部主机曾经发送过报文给外部主机（假设其IP地址为Z）后，外部主机才能以Y中的信息作为目标地址和目标端口，向内部主机发送UDP请求报文，这意味着，NAT设备只向内转发（目标地址/端口转换）那些来自于当前已知的外部主机的UDP报文，从而保障了外部请求来源的安全性。（IP相同，port随便，就能和先前内部节点被映射的外部Tuple进行通信）</p>
+<h2 id="33-port-restricted-cone-nat严格限制的锥形nat">3.3 Port Restricted Cone NAT（严格限制的锥形NAT）</h2>
+<p>它是Restricted Cone NAT的进一步受限版。只有当内部主机曾经发送过报文给外部主机（假设其IP地址为Z且端口为P）之后，外部主机才能以Y中的信息作为目标地址和目标端 口，向内部主机发送UDP报文，同时，其请求报文的源端口必须为P，这一要求进一步强化了对外部报文请求来源的限制，从而较Restrictd Cone更具安全性 （ip,port都得一样；只能用先前内部节点被映射的外部Tuple与内部节点进行通信））</p>
+<h2 id="34-symmetric-nat对称nat">3.4 Symmetric NAT（对称NAT）</h2>
+<p>在Cone NAT中，NAT转换映射关系仅与内部Tuple和外部Tuple相关，与目标Tuple无关。而在Symmetric NAT中，即使内部Tuple和外部Tuple相同，但目标Tuple不同，在此情况下将建立两条转换映射关系。此外，NAT的过滤方式与Port Restricted Cone相同。</p>
+<hr>
+<p><a class="link" href="https://www.cnblogs.com/my_life/articles/1908552.html"  target="_blank" rel="noopener"
+    >NAT的四种类型及类型检测 - bw_0927 - 博客园</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/nat/">NAT</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="1368129224/blog"
+        issue-term="pathname"
+        
+        label="github-light"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2022 新泽雪冬
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.10.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#21-内部tuple">2.1 内部Tuple</a></li>
+    <li><a href="#22-外部tuple">2.2 外部Tuple</a></li>
+    <li><a href="#23-目标tuple">2.3 目标Tuple</a></li>
+    <li><a href="#24-basic-nat基本nat">2.4 Basic NAT（基本NAT）</a></li>
+    <li><a href="#25-natp网络地址-端口转换">2.5 NATP（网络地址-端口转换）</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#31-full-cone-nat锥形nat">3.1 Full Cone NAT（锥形NAT）</a></li>
+    <li><a href="#32-restricted-cone-nat受限的锥形nat">3.2 Restricted Cone NAT（受限的锥形NAT）</a></li>
+    <li><a href="#33-port-restricted-cone-nat严格限制的锥形nat">3.3 Port Restricted Cone NAT（严格限制的锥形NAT）</a></li>
+    <li><a href="#34-symmetric-nat对称nat">3.4 Symmetric NAT（对称NAT）</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
