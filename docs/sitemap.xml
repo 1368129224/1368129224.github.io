@@ -14,16 +14,16 @@
     <loc>https://blog.zooter.com.cn/posts/second-post/</loc>
     <lastmod>2022-03-07T13:44:29+08:00</lastmod>
   </url><url>
+    <loc>https://blog.zooter.com.cn/categories/c/</loc>
+    <lastmod>2022-03-07T10:37:45+08:00</lastmod>
+  </url><url>
     <loc>https://blog.zooter.com.cn/categories/</loc>
     <lastmod>2022-03-07T10:37:45+08:00</lastmod>
   </url><url>
     <loc>https://blog.zooter.com.cn/posts/first-post/</loc>
     <lastmod>2022-03-07T10:37:45+08:00</lastmod>
   </url><url>
-    <loc>https://blog.zooter.com.cn/categories/%E6%A8%A1%E6%9D%BF/</loc>
-    <lastmod>2022-03-07T10:37:45+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.zooter.com.cn/categories/%E6%B5%8B%E8%AF%95/</loc>
+    <loc>https://blog.zooter.com.cn/categories/linux/</loc>
     <lastmod>2022-03-07T10:37:45+08:00</lastmod>
   </url><url>
     <loc>https://blog.zooter.com.cn/posts/test-chinese/</loc>
@@ -36,6 +36,9 @@
     <lastmod>2020-09-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://blog.zooter.com.cn/categories/test/</loc>
+    <lastmod>2020-09-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.zooter.com.cn/categories/%E6%B5%8B%E8%AF%95/</loc>
     <lastmod>2020-09-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://blog.zooter.com.cn/page/</loc>
@@ -55,6 +58,8 @@
   </url><url>
     <loc>https://blog.zooter.com.cn/search/</loc>
   </url><url>
-    <loc>https://blog.zooter.com.cn/%E9%93%BE%E6%8E%A5/</loc>
+    <loc>https://blog.zooter.com.cn/categories/%E6%97%A5%E5%B8%B8/</loc>
+  </url><url>
+    <loc>https://blog.zooter.com.cn/categories/%E7%BD%91%E7%BB%9C/</loc>
   </url>
 </urlset>
