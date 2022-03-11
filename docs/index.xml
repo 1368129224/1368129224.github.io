@@ -41,6 +41,15 @@
 </description>
         </item>
         <item>
+        <title>关于</title>
+        <link>https://blog.zooter.com.cn/%E5%85%B3%E4%BA%8E/</link>
+        <pubDate>Fri, 11 Mar 2022 00:03:02 -0800</pubDate>
+        
+        <guid>https://blog.zooter.com.cn/%E5%85%B3%E4%BA%8E/</guid>
+        <description>&lt;p&gt;建设中。。。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>802.11 kvr协议简述</title>
         <link>https://blog.zooter.com.cn/posts/802.11-kvr/</link>
         <pubDate>Fri, 11 Mar 2022 10:37:45 +0800</pubDate>
@@ -74,34 +83,6 @@
 &lt;p&gt;在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。&lt;/p&gt;
 &lt;p&gt;在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。&lt;/p&gt;
 &lt;p&gt;802.11r通过重新简化（越来越复杂的）安全握手协议，来实现FT。&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>关于</title>
-        <link>https://blog.zooter.com.cn/%E5%85%B3%E4%BA%8E/</link>
-        <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
-        
-        <guid>https://blog.zooter.com.cn/%E5%85%B3%E4%BA%8E/</guid>
-        <description>&lt;p&gt;Written in Go, Hugo is an open source static site generator available under the &lt;a class=&#34;link&#34; href=&#34;https://github.com/gohugoio/hugo/blob/master/LICENSE&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Apache Licence 2.0.&lt;/a&gt; Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.&lt;/p&gt;
-&lt;p&gt;Hugo makes use of a variety of open source projects including:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/yuin/goldmark&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/yuin/goldmark&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/alecthomas/chroma&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/alecthomas/chroma&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/muesli/smartcrop&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/muesli/smartcrop&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/spf13/cobra&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/spf13/cobra&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/spf13/viper&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/spf13/viper&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Hugo is ideal for blogs, corporate websites, creative portfolios, online magazines, single page applications or even a website with thousands of pages.&lt;/p&gt;
-&lt;p&gt;Hugo is for people who want to hand code their own website without worrying about setting up complicated runtimes, dependencies and databases.&lt;/p&gt;
-&lt;p&gt;Websites built with Hugo are extremelly fast, secure and can be deployed anywhere including, AWS, GitHub Pages, Heroku, Netlify and any other hosting provider.&lt;/p&gt;
-&lt;p&gt;Learn more and contribute on &lt;a class=&#34;link&#34; href=&#34;https://github.com/gohugoio&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;GitHub&lt;/a&gt;.&lt;/p&gt;
 </description>
         </item>
         <item>
