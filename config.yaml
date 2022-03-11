@@ -44,7 +44,7 @@ params:
         lastUpdated: Jan 02, 2006 15:04 MST
 
     sidebar:
-        emoji: 🍥
+        emoji: 
         subtitle: 认清现实，放弃幻想。
         avatar:
             enabled: true
@@ -122,12 +122,6 @@ menu:
           url: https://github.com/1368129224
           params:
               icon: brand-github
-
-        - identifier: twitter
-          name: Twitter
-          url: https://github.com/136812922222
-          params:
-              icon: brand-twitter
 
 related:
     includeNewer: true
