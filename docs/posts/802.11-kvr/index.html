@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
+在WLAN中，终端设备总是倾向于连接信号最好的那个AP，而在实际应用中，这种逻辑可能会造成某个AP被过度使用，而信号稍弱的AP则没有怎么用到，从而导致网络的整体利用效率下降。实现802.11k协议的无线网络中，如果信号最好的AP已经满载，则终端设备会连接到信号稍弱的那个AP。
+协议步骤：
+ AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
+802.11v描述了WNM的增强，包括：
+ Network assisted Power Savings：网络辅助节能，帮助终端设备睡眠更长时间，比如，手机等设备通过每隔一段时间跟AP通讯一次来确保跟AP没有断开 Network assisted Roaming：网络辅助漫游，允许WLAN发送信息给终端，来确保终端能连接更好的AP。  这可以带来两点好处：
+ 负载均衡 让信号不好的终端设备更换AP  802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
+在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。
+在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。
+802.11r通过重新简化（越来越复杂的）安全握手协议，来实现FT。'><title>802.11 kvr协议简述</title>
+
+<link rel='canonical' href='https://blog.zooter.com.cn/posts/802.11-kvr/'>
+
+<link rel="stylesheet" href="/scss/style.min.b80bf249ce4a22cf55e8d7340a0b37a2f2c10f54f3a9a49cb94b694a2eb0bbea.css"><meta property='og:title' content='802.11 kvr协议简述'>
+<meta property='og:description' content='802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
+在WLAN中，终端设备总是倾向于连接信号最好的那个AP，而在实际应用中，这种逻辑可能会造成某个AP被过度使用，而信号稍弱的AP则没有怎么用到，从而导致网络的整体利用效率下降。实现802.11k协议的无线网络中，如果信号最好的AP已经满载，则终端设备会连接到信号稍弱的那个AP。
+协议步骤：
+ AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
+802.11v描述了WNM的增强，包括：
+ Network assisted Power Savings：网络辅助节能，帮助终端设备睡眠更长时间，比如，手机等设备通过每隔一段时间跟AP通讯一次来确保跟AP没有断开 Network assisted Roaming：网络辅助漫游，允许WLAN发送信息给终端，来确保终端能连接更好的AP。  这可以带来两点好处：
+ 负载均衡 让信号不好的终端设备更换AP  802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
+在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。
+在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。
+802.11r通过重新简化（越来越复杂的）安全握手协议，来实现FT。'>
+<meta property='og:url' content='https://blog.zooter.com.cn/posts/802.11-kvr/'>
+<meta property='og:site_name' content='新泽雪冬'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='无线网络' /><meta property='article:published_time' content='2022-03-11T10:37:45&#43;08:00'/><meta property='article:modified_time' content='2022-03-11T10:37:45&#43;08:00'/><meta property='og:image' content='https://blog.zooter.com.cn/img/bg.jpg' />
+<meta name="twitter:title" content="802.11 kvr协议简述">
+<meta name="twitter:description" content="802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
+在WLAN中，终端设备总是倾向于连接信号最好的那个AP，而在实际应用中，这种逻辑可能会造成某个AP被过度使用，而信号稍弱的AP则没有怎么用到，从而导致网络的整体利用效率下降。实现802.11k协议的无线网络中，如果信号最好的AP已经满载，则终端设备会连接到信号稍弱的那个AP。
+协议步骤：
+ AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
+802.11v描述了WNM的增强，包括：
+ Network assisted Power Savings：网络辅助节能，帮助终端设备睡眠更长时间，比如，手机等设备通过每隔一段时间跟AP通讯一次来确保跟AP没有断开 Network assisted Roaming：网络辅助漫游，允许WLAN发送信息给终端，来确保终端能连接更好的AP。  这可以带来两点好处：
+ 负载均衡 让信号不好的终端设备更换AP  802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
+在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。
+在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。
+802.11r通过重新简化（越来越复杂的）安全握手协议，来实现FT。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://blog.zooter.com.cn/img/bg.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "light");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu194a4ecf12a7b93a64a6cdaa7d7cb00e_36749_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">新泽雪冬</a></h1>
+            <h2 class="site-description">认清现实，放弃幻想。</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/1368129224'
+                        target="_blank"
+                        title="GitHub"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/136812922222'
+                        target="_blank"
+                        title="Twitter"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+        </div>
+    </ol>
+</aside>
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/802.11/" style="background-color: #B0C4DE; color: #fff;">
+                802.11
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/802.11-kvr/">802.11 kvr协议简述</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 11, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 1 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="80211k">802.11k</h1>
+<p>802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。</p>
+<p>在WLAN中，终端设备总是倾向于连接信号最好的那个AP，而在实际应用中，这种逻辑可能会造成某个AP被过度使用，而信号稍弱的AP则没有怎么用到，从而导致网络的整体利用效率下降。实现802.11k协议的无线网络中，如果信号最好的AP已经满载，则终端设备会连接到信号稍弱的那个AP。</p>
+<p>协议步骤：</p>
+<ol>
+<li>AP决定要踢掉某个终端设备</li>
+<li>通知终端设备变换到另一个AP</li>
+<li>终端设备请求周围AP的列表</li>
+<li>AP给出site report</li>
+<li>终端设备根据site report连到某个AP</li>
+</ol>
+<h1 id="80211v">802.11v</h1>
+<p>802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。</p>
+<p>802.11v描述了WNM的增强，包括：</p>
+<ul>
+<li>Network assisted Power Savings：网络辅助节能，帮助终端设备睡眠更长时间，比如，手机等设备通过每隔一段时间跟AP通讯一次来确保跟AP没有断开</li>
+<li>Network assisted Roaming：网络辅助漫游，允许WLAN发送信息给终端，来确保终端能连接更好的AP。</li>
+</ul>
+<p>这可以带来两点好处：</p>
+<ol>
+<li>负载均衡</li>
+<li>让信号不好的终端设备更换AP</li>
+</ol>
+<h1 id="80211r">802.11r</h1>
+<p>802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。</p>
+<p>在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。</p>
+<p>在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。</p>
+<p>802.11r通过重新简化（越来越复杂的）安全握手协议，来实现FT。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C/">无线网络</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="1368129224/blog"
+        issue-term="pathname"
+        
+        label="github-light"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2022 新泽雪冬
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.10.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

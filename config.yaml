@@ -74,13 +74,13 @@ params:
             - type: about
             - type: archives
               params:
-                  limit: 5
+                  limit: 20
             - type: categories
               params:
-                  limit: 10
+                  limit: 20
             - type: tag-cloud
               params:
-                  limit: 10
+                  limit: 20
         page:
             - type: toc
 
