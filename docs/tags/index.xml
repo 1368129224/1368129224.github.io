@@ -6,7 +6,15 @@
         <description>Recent content in Tags on 新泽雪冬</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Wed, 16 Mar 2022 20:10:15 -0700</lastBuildDate><atom:link href="https://blog.zooter.com.cn/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 16 Mar 2022 23:55:55 -0700</lastBuildDate><atom:link href="https://blog.zooter.com.cn/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>GDB</title>
+        <link>https://blog.zooter.com.cn/tags/gdb/</link>
+        <pubDate>Wed, 16 Mar 2022 23:55:55 -0700</pubDate>
+        
+        <guid>https://blog.zooter.com.cn/tags/gdb/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>IPv6</title>
         <link>https://blog.zooter.com.cn/tags/ipv6/</link>
         <pubDate>Wed, 16 Mar 2022 20:10:15 -0700</pubDate>

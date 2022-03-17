@@ -4,6 +4,6 @@ description: "Linux相关"
 slug: "Linux"
 image: "342.jpeg"
 style:
-    background: "#2a9d8f"
+    background: "#FFA500"
     color: "#fff"
 ---

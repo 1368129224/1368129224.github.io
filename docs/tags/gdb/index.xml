@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>C on 新泽雪冬</title>
-        <link>https://blog.zooter.com.cn/categories/c/</link>
-        <description>Recent content in C on 新泽雪冬</description>
+        <title>GDB on 新泽雪冬</title>
+        <link>https://blog.zooter.com.cn/tags/gdb/</link>
+        <description>Recent content in GDB on 新泽雪冬</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Wed, 16 Mar 2022 23:55:55 -0700</lastBuildDate><atom:link href="https://blog.zooter.com.cn/categories/c/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 16 Mar 2022 23:55:55 -0700</lastBuildDate><atom:link href="https://blog.zooter.com.cn/tags/gdb/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>GDB在线调试方法</title>
         <link>https://blog.zooter.com.cn/posts/gdb%E5%9C%A8%E7%BA%BF%E8%B0%83%E8%AF%95/</link>
         <pubDate>Wed, 16 Mar 2022 23:55:55 -0700</pubDate>
