@@ -9,25 +9,27 @@ categories:
   - "网络"
 ---
 
-## 一、iptables
+# iptables简介
+
+## 1. iptables
 
 iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。
 
 通常来说iptables仅用于处理IPv4数据包，对于IPv6需要使用ip6tables命令。
 
-## 二、netfilter
+## 2. netfilter
 
 netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。
 
 我们可以使用用户空间中的iptables、nftables、ebtables和arptables等软件来控制netfilter，进而管理通过本系统的数据包。
 
-## 三、基础
+## 3. 基本概念
 
 iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。
 
 协议可以查看```/etc/protocols/```中定义的协议类型，可使用名字(不区分大小写)、对应编号。缺省值为0，代表tcp、udp、icmp而不是定义的所有协议类型。
 
-### 1.五链
+### 3.1. 五链
 
 ![五链](6b25093691631632e406caa95efc2073.png)
 五链就是指图中的：prerouting、input、forward、postrouting、output五种数据包动作。
@@ -37,7 +39,7 @@ iptables根据规则来对数据包进行管理，一条规则包含：动作、
 2. 进过本机转发的数据包：prerouting、forward、postrouting
 3. 本机发出的数据包：output、postrouting
 
-### 2.四表
+### 3.2. 四表
 
 iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：
 
@@ -46,7 +48,7 @@ iptables把功能相似的规则放在同一张表中，默认为我们创建了
 * mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle
 * raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw
 
-### 3.链和表的关系
+### 3.3. 链和表的关系
 
 不同表能作用的链的关系如表：
 
@@ -63,11 +65,11 @@ iptables把功能相似的规则放在同一张表中，默认为我们创建了
 
 ![数据包处理流程](38580d12214b7e58866fe1fff9621e13.png)
 
-## 四、规则
+## 4. 规则
 
 规则是根据指定的匹配条件来尝试匹配每个流经此处的报文，一旦匹配成功，则由规则后面指定的处理动作进行处理。
 
-### 1. 匹配条件
+### 4.1. 匹配条件
 
 匹配条件分为基本匹配条件与扩展匹配条件：
 
@@ -79,7 +81,7 @@ iptables把功能相似的规则放在同一张表中，默认为我们创建了
 
 下面仅列出常用的简单匹配规则。
 
-#### 1.1 IP地址匹配
+#### 4.1.1 IP地址匹配
 
 我们可以使用```-s```和```-d```指定匹配源IP和目的IP，还可以使用```!```来表示取反，多个规则时使用```,```号隔开。例如：
 
@@ -100,7 +102,7 @@ iptables -I INPUT ! -s 1.1.1.6 -j ACCEPT
 iptables -I INPUT -s 1.1.1.7 -d 1.1.1.8 -j DROP
 ```
 
-#### 1.2 协议匹配
+#### 4.1.2 协议匹配
 
 我们可以使用```-p```指定匹配的协议，可使用协议名称(不区分大小写)，或对应编号。支持协议可查看```/etc/protocols```中的内容，也可以查看相关[RFC文档定义的协议和对应编号](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)。
 
@@ -111,11 +113,11 @@ iptables -I INPUT -s 1.1.1.7 -d 1.1.1.8 -j DROP
 iptables -I INPUT -s 1.1.1.2 -p icmp -j DROP
 ```
 
-#### 1.3 接口匹配
+#### 4.1.3 接口匹配
 
 我们还可以使用```-i```和```-o```参数根据流入和流出的接口来匹配。```-i```匹配流入的网卡，作用于PREROUTING、INPUT、FORWARD；```-o```匹配流出的网卡，作用于FORWARD、OUTPUT、POSTROUTING。
 
-#### 1.4 端口匹配
+#### 4.1.4 端口匹配
 
 端口匹配属于扩展匹配条件，需要依赖扩展模块。
 
@@ -136,7 +138,7 @@ iptables -I INPUT -s 1.1.1.2 -p icmp -j DROP
    iptables -I INPUT -s 1.1.1.2 -p tcp -m multiport --dports 22,36,80 -j DROP
    ```
 
-### 2. 处理动作
+### 4.2. 处理动作
 
 处理动作在iptables中被称为target（这样说并不准确，我们暂且这样称呼），动作也可以分为基本动作和扩展动作。
 此处列出一些常用的动作，之后的文章会对它们进行详细的示例与总结：
@@ -161,7 +163,7 @@ iptables -I INPUT -s 1.1.1.2 -p icmp -j DROP
 
 补充一下DROP和REJECT的区别。DROP是直接把匹配到的报文丢弃，REJECT除了把报文丢弃还会给该报文中的源IP发一个ICMP报文说明目的不可达(直接回复不可达, 更强硬)。前者报文发送方只能等超时，而后者发送方因为收到了ICMP不可达所以马上就给出了提示。
 
-## 五、命令使用
+## 5. 命令使用
 
 ```shell
 ~ # iptables -h
@@ -234,7 +236,7 @@ Options:
 [!] --version -V    print package version.
 ```
 
-## 六、filter表实践
+## 6. filter表实践
 
 filter是负责数据包过滤的表，是我们最常用的表。
 

@@ -34,7 +34,7 @@
 &lt;li&gt;对移动网络优化，邻居发现和可扩展报头解决了IPv4的三角路由、源地址过滤问题&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;3-地址&#34;&gt;3. 地址&lt;/h2&gt;
-&lt;h3 id=&#34;31-格式&#34;&gt;3.1 格式&lt;/h3&gt;
+&lt;h3 id=&#34;31-地址格式&#34;&gt;3.1 地址格式&lt;/h3&gt;
 &lt;p&gt;IPv6采用128位来标志，16位为一组，用&amp;quot;:&amp;ldquo;隔开，分为8组，每组用4位十六进制数表示。&lt;/p&gt;
 &lt;p&gt;一个IPv6的地址可以分为两个部分：&lt;/p&gt;
 &lt;ol&gt;
@@ -267,7 +267,7 @@
 &lt;li&gt;0:0:0:0:0:ffff:ce7b:1f01&lt;/li&gt;
 &lt;li&gt;::ffff:ce7b:1f01&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;327-guaulalla对比&#34;&gt;3.2.7 GUA/ULA/LLA对比&lt;/h4&gt;
+&lt;h3 id=&#34;33-guaulalla对比&#34;&gt;3.3 GUA/ULA/LLA对比&lt;/h3&gt;
 &lt;p&gt;GUA：Global Unicast Addresses全球单播地址&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;一个接口可有多个全球单播地址&lt;/li&gt;
@@ -292,16 +292,17 @@
         <pubDate>Wed, 16 Mar 2022 19:46:25 -0700</pubDate>
         
         <guid>https://blog.zooter.com.cn/posts/iptables%E7%AE%80%E4%BB%8B/</guid>
-        <description>&lt;h2 id=&#34;一iptables&#34;&gt;一、iptables&lt;/h2&gt;
+        <description>&lt;h1 id=&#34;iptables简介&#34;&gt;iptables简介&lt;/h1&gt;
+&lt;h2 id=&#34;1-iptables&#34;&gt;1. iptables&lt;/h2&gt;
 &lt;p&gt;iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。&lt;/p&gt;
 &lt;p&gt;通常来说iptables仅用于处理IPv4数据包，对于IPv6需要使用ip6tables命令。&lt;/p&gt;
-&lt;h2 id=&#34;二netfilter&#34;&gt;二、netfilter&lt;/h2&gt;
+&lt;h2 id=&#34;2-netfilter&#34;&gt;2. netfilter&lt;/h2&gt;
 &lt;p&gt;netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。&lt;/p&gt;
 &lt;p&gt;我们可以使用用户空间中的iptables、nftables、ebtables和arptables等软件来控制netfilter，进而管理通过本系统的数据包。&lt;/p&gt;
-&lt;h2 id=&#34;三基础&#34;&gt;三、基础&lt;/h2&gt;
+&lt;h2 id=&#34;3-基本概念&#34;&gt;3. 基本概念&lt;/h2&gt;
 &lt;p&gt;iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。&lt;/p&gt;
 &lt;p&gt;协议可以查看&lt;code&gt;/etc/protocols/&lt;/code&gt;中定义的协议类型，可使用名字(不区分大小写)、对应编号。缺省值为0，代表tcp、udp、icmp而不是定义的所有协议类型。&lt;/p&gt;
-&lt;h3 id=&#34;1五链&#34;&gt;1.五链&lt;/h3&gt;
+&lt;h3 id=&#34;31-五链&#34;&gt;3.1. 五链&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&#34;https://blog.zooter.com.cn/posts/iptables%E7%AE%80%E4%BB%8B/6b25093691631632e406caa95efc2073.png&#34;
 	width=&#34;879&#34;
 	height=&#34;503&#34;
@@ -323,7 +324,7 @@
 &lt;li&gt;进过本机转发的数据包：prerouting、forward、postrouting&lt;/li&gt;
 &lt;li&gt;本机发出的数据包：output、postrouting&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&#34;2四表&#34;&gt;2.四表&lt;/h3&gt;
+&lt;h3 id=&#34;32-四表&#34;&gt;3.2. 四表&lt;/h3&gt;
 &lt;p&gt;iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;filter：过滤数据包。内核模块：iptables_filter&lt;/li&gt;
@@ -331,7 +332,7 @@
 &lt;li&gt;mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle&lt;/li&gt;
 &lt;li&gt;raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;3链和表的关系&#34;&gt;3.链和表的关系&lt;/h3&gt;
+&lt;h3 id=&#34;33-链和表的关系&#34;&gt;3.3. 链和表的关系&lt;/h3&gt;
 &lt;p&gt;不同表能作用的链的关系如表：&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -408,9 +409,9 @@
 		data-flex-basis=&#34;141px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;四规则&#34;&gt;四、规则&lt;/h2&gt;
+&lt;h2 id=&#34;4-规则&#34;&gt;4. 规则&lt;/h2&gt;
 &lt;p&gt;规则是根据指定的匹配条件来尝试匹配每个流经此处的报文，一旦匹配成功，则由规则后面指定的处理动作进行处理。&lt;/p&gt;
-&lt;h3 id=&#34;1-匹配条件&#34;&gt;1. 匹配条件&lt;/h3&gt;
+&lt;h3 id=&#34;41-匹配条件&#34;&gt;4.1. 匹配条件&lt;/h3&gt;
 &lt;p&gt;匹配条件分为基本匹配条件与扩展匹配条件：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;基本匹配条件：
@@ -420,7 +421,7 @@
 除了上述的条件可以用于匹配，还有很多其他的条件可以用于匹配，这些条件泛称为扩展条件，这些扩展条件其实也是netfilter中的一部分，只是以模块的形式存在，如果想要使用这些条件，则需要依赖对应的扩展模块。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;下面仅列出常用的简单匹配规则。&lt;/p&gt;
-&lt;h4 id=&#34;11-ip地址匹配&#34;&gt;1.1 IP地址匹配&lt;/h4&gt;
+&lt;h4 id=&#34;411-ip地址匹配&#34;&gt;4.1.1 IP地址匹配&lt;/h4&gt;
 &lt;p&gt;我们可以使用&lt;code&gt;-s&lt;/code&gt;和&lt;code&gt;-d&lt;/code&gt;指定匹配源IP和目的IP，还可以使用&lt;code&gt;!&lt;/code&gt;来表示取反，多个规则时使用&lt;code&gt;,&lt;/code&gt;号隔开。例如：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -456,7 +457,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;iptables -I INPUT -s 1.1.1.7 -d 1.1.1.8 -j DROP
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id=&#34;12-协议匹配&#34;&gt;1.2 协议匹配&lt;/h4&gt;
+&lt;/div&gt;&lt;h4 id=&#34;412-协议匹配&#34;&gt;4.1.2 协议匹配&lt;/h4&gt;
 &lt;p&gt;我们可以使用&lt;code&gt;-p&lt;/code&gt;指定匹配的协议，可使用协议名称(不区分大小写)，或对应编号。支持协议可查看&lt;code&gt;/etc/protocols&lt;/code&gt;中的内容，也可以查看相关&lt;a class=&#34;link&#34; href=&#34;https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;RFC文档定义的协议和对应编号&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;在指定IP地址匹配的同时可指定具体协议，例如：&lt;/p&gt;
@@ -470,9 +471,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;iptables -I INPUT -s 1.1.1.2 -p icmp -j DROP
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id=&#34;13-接口匹配&#34;&gt;1.3 接口匹配&lt;/h4&gt;
+&lt;/div&gt;&lt;h4 id=&#34;413-接口匹配&#34;&gt;4.1.3 接口匹配&lt;/h4&gt;
 &lt;p&gt;我们还可以使用&lt;code&gt;-i&lt;/code&gt;和&lt;code&gt;-o&lt;/code&gt;参数根据流入和流出的接口来匹配。&lt;code&gt;-i&lt;/code&gt;匹配流入的网卡，作用于PREROUTING、INPUT、FORWARD；&lt;code&gt;-o&lt;/code&gt;匹配流出的网卡，作用于FORWARD、OUTPUT、POSTROUTING。&lt;/p&gt;
-&lt;h4 id=&#34;14-端口匹配&#34;&gt;1.4 端口匹配&lt;/h4&gt;
+&lt;h4 id=&#34;414-端口匹配&#34;&gt;4.1.4 端口匹配&lt;/h4&gt;
 &lt;p&gt;端口匹配属于扩展匹配条件，需要依赖扩展模块。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
@@ -502,7 +503,7 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&#34;2-处理动作&#34;&gt;2. 处理动作&lt;/h3&gt;
+&lt;h3 id=&#34;42-处理动作&#34;&gt;4.2. 处理动作&lt;/h3&gt;
 &lt;p&gt;处理动作在iptables中被称为target（这样说并不准确，我们暂且这样称呼），动作也可以分为基本动作和扩展动作。
 此处列出一些常用的动作，之后的文章会对它们进行详细的示例与总结：&lt;/p&gt;
 &lt;ul&gt;
@@ -533,7 +534,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;补充一下DROP和REJECT的区别。DROP是直接把匹配到的报文丢弃，REJECT除了把报文丢弃还会给该报文中的源IP发一个ICMP报文说明目的不可达(直接回复不可达, 更强硬)。前者报文发送方只能等超时，而后者发送方因为收到了ICMP不可达所以马上就给出了提示。&lt;/p&gt;
-&lt;h2 id=&#34;五命令使用&#34;&gt;五、命令使用&lt;/h2&gt;
+&lt;h2 id=&#34;5-命令使用&#34;&gt;5. 命令使用&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -676,7 +677,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;!&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; --version -V    print package version.
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;六filter表实践&#34;&gt;六、filter表实践&lt;/h2&gt;
+&lt;/div&gt;&lt;h2 id=&#34;6-filter表实践&#34;&gt;6. filter表实践&lt;/h2&gt;
 &lt;p&gt;filter是负责数据包过滤的表，是我们最常用的表。&lt;/p&gt;
 &lt;p&gt;首先查看filter表中原有的规则：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;

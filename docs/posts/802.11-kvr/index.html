@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='802.11 kvr协议简述 1. 802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
 在WLAN中，终端设备总是倾向于连接信号最好的那个AP，而在实际应用中，这种逻辑可能会造成某个AP被过度使用，而信号稍弱的AP则没有怎么用到，从而导致网络的整体利用效率下降。实现802.11k协议的无线网络中，如果信号最好的AP已经满载，则终端设备会连接到信号稍弱的那个AP。
 协议步骤：
- AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
+ AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  2. 802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
 802.11v描述了WNM的增强，包括：
  Network assisted Power Savings：网络辅助节能，帮助终端设备睡眠更长时间，比如，手机等设备通过每隔一段时间跟AP通讯一次来确保跟AP没有断开 Network assisted Roaming：网络辅助漫游，允许WLAN发送信息给终端，来确保终端能连接更好的AP。  这可以带来两点好处：
- 负载均衡 让信号不好的终端设备更换AP  802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
+ 负载均衡 让信号不好的终端设备更换AP  3. 802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
 在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。
 在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。
 802.11r通过重新简化（越来越复杂的）安全握手协议，来实现FT。'><title>802.11 kvr协议简述</title>
@@ -15,13 +15,13 @@
 <link rel='canonical' href='https://blog.zooter.com.cn/posts/802.11-kvr/'>
 
 <link rel="stylesheet" href="/scss/style.min.dedb39d9f8ace1743cfa8343d6a5829b27e5a3839c1a7533e656218fc7b486c6.css"><meta property='og:title' content='802.11 kvr协议简述'>
-<meta property='og:description' content='802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
+<meta property='og:description' content='802.11 kvr协议简述 1. 802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
 在WLAN中，终端设备总是倾向于连接信号最好的那个AP，而在实际应用中，这种逻辑可能会造成某个AP被过度使用，而信号稍弱的AP则没有怎么用到，从而导致网络的整体利用效率下降。实现802.11k协议的无线网络中，如果信号最好的AP已经满载，则终端设备会连接到信号稍弱的那个AP。
 协议步骤：
- AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
+ AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  2. 802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
 802.11v描述了WNM的增强，包括：
  Network assisted Power Savings：网络辅助节能，帮助终端设备睡眠更长时间，比如，手机等设备通过每隔一段时间跟AP通讯一次来确保跟AP没有断开 Network assisted Roaming：网络辅助漫游，允许WLAN发送信息给终端，来确保终端能连接更好的AP。  这可以带来两点好处：
- 负载均衡 让信号不好的终端设备更换AP  802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
+ 负载均衡 让信号不好的终端设备更换AP  3. 802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
 在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。
 在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。
 802.11r通过重新简化（越来越复杂的）安全握手协议，来实现FT。'>
@@ -29,13 +29,13 @@
 <meta property='og:site_name' content='新泽雪冬'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='无线网络' /><meta property='article:published_time' content='2022-03-11T10:37:45&#43;08:00'/><meta property='article:modified_time' content='2022-03-11T10:37:45&#43;08:00'/><meta property='og:image' content='https://blog.zooter.com.cn/img/bg.jpg' />
 <meta name="twitter:title" content="802.11 kvr协议简述">
-<meta name="twitter:description" content="802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
+<meta name="twitter:description" content="802.11 kvr协议简述 1. 802.11k 802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。
 在WLAN中，终端设备总是倾向于连接信号最好的那个AP，而在实际应用中，这种逻辑可能会造成某个AP被过度使用，而信号稍弱的AP则没有怎么用到，从而导致网络的整体利用效率下降。实现802.11k协议的无线网络中，如果信号最好的AP已经满载，则终端设备会连接到信号稍弱的那个AP。
 协议步骤：
- AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
+ AP决定要踢掉某个终端设备 通知终端设备变换到另一个AP 终端设备请求周围AP的列表 AP给出site report 终端设备根据site report连到某个AP  2. 802.11v 802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。
 802.11v描述了WNM的增强，包括：
  Network assisted Power Savings：网络辅助节能，帮助终端设备睡眠更长时间，比如，手机等设备通过每隔一段时间跟AP通讯一次来确保跟AP没有断开 Network assisted Roaming：网络辅助漫游，允许WLAN发送信息给终端，来确保终端能连接更好的AP。  这可以带来两点好处：
- 负载均衡 让信号不好的终端设备更换AP  802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
+ 负载均衡 让信号不好的终端设备更换AP  3. 802.11r 802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。
 在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。
 在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。
 802.11r通过重新简化（越来越复杂的）安全握手协议，来实现FT。"><meta name="twitter:card" content="summary_large_image">
@@ -279,7 +279,8 @@
     <section class="article-content">
     
     
-    <h1 id="80211k">802.11k</h1>
+    <h1 id="80211-kvr协议简述">802.11 kvr协议简述</h1>
+<h2 id="1-80211k">1. 802.11k</h2>
 <p>802.11k协议的功能是Radio Resource Measurment，简单说就是提供找到最好的AP的信息。</p>
 <p>在WLAN中，终端设备总是倾向于连接信号最好的那个AP，而在实际应用中，这种逻辑可能会造成某个AP被过度使用，而信号稍弱的AP则没有怎么用到，从而导致网络的整体利用效率下降。实现802.11k协议的无线网络中，如果信号最好的AP已经满载，则终端设备会连接到信号稍弱的那个AP。</p>
 <p>协议步骤：</p>
@@ -290,7 +291,7 @@
 <li>AP给出site report</li>
 <li>终端设备根据site report连到某个AP</li>
 </ol>
-<h1 id="80211v">802.11v</h1>
+<h2 id="2-80211v">2. 802.11v</h2>
 <p>802.11v是802.11协议族的WNM（Wireless Network Management）标准，802.11v协议允许终端设备交换网络拓扑的信息，包括射频环境。</p>
 <p>802.11v描述了WNM的增强，包括：</p>
 <ul>
@@ -302,7 +303,7 @@
 <li>负载均衡</li>
 <li>让信号不好的终端设备更换AP</li>
 </ol>
-<h1 id="80211r">802.11r</h1>
+<h2 id="3-80211r">3. 802.11r</h2>
 <p>802.11r的功能是快速BSS切换（FT，Fast Basic Service Set Transition），也称为快速漫游（fast roaming），是802.11协议的补充。</p>
 <p>在802.11协议中，AP的切换是由设备控制的（其逻辑是：在能连接到的信号中，挑选信号最好的那个连接，连接一直持续到信号低于一个阈值（通常非常弱）才会断开，然后继续反复）。</p>
 <p>在802.11的初期，切换（handoff）这个操作是非常简单的，一共只有4个握手信息需要传递，但是随着发展，802.11i，802.11X，802.11e等协议的加入，握手的信息越来越多，导致切换AP的时间越来越长。</p>
@@ -482,7 +483,40 @@
             >
 
             </main>
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#1-80211k">1. 802.11k</a></li>
+    <li><a href="#2-80211v">2. 802.11v</a></li>
+    <li><a href="#3-80211r">3. 802.11r</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
         </div>
         <script 

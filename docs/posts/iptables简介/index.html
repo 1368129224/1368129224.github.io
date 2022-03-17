@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='一、iptables iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='iptables简介 1. iptables iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。
 通常来说iptables仅用于处理IPv4数据包，对于IPv6需要使用ip6tables命令。
-二、netfilter netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。
+2. netfilter netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。
 我们可以使用用户空间中的iptables、nftables、ebtables和arptables等软件来控制netfilter，进而管理通过本系统的数据包。
-三、基础 iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。
+3. 基本概念 iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。
 协议可以查看/etc/protocols/中定义的协议类型，可使用名字(不区分大小写)、对应编号。缺省值为0，代表tcp、udp、icmp而不是定义的所有协议类型。
-1.五链 五链就是指图中的：prerouting、input、forward、postrouting、output五种数据包动作。 例如：
- 到本机某进程的数据包：prerouting、input 进过本机转发的数据包：prerouting、forward、postrouting 本机发出的数据包：output、postrouting  2.四表 iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：
- filter：过滤数据包。内核模块：iptables_filter nat：网络地址转换。内核模块：iptable_nat mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw  3.链和表的关系 不同表能作用的链的关系如表：
+3.1. 五链 五链就是指图中的：prerouting、input、forward、postrouting、output五种数据包动作。 例如：
+ 到本机某进程的数据包：prerouting、input 进过本机转发的数据包：prerouting、forward、postrouting 本机发出的数据包：output、postrouting  3.2. 四表 iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：
+ filter：过滤数据包。内核模块：iptables_filter nat：网络地址转换。内核模块：iptable_nat mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw  3.3. 链和表的关系 不同表能作用的链的关系如表：
    四表/五链 PREROUTING INPUT FORWARD OUTPUT POSTROUTING     filter  √ √ √    nat √ √(centos7)  √ √   mangle √ √ √ √ √   raw √   √     表的优先级关系：raw &amp;gt; mangle &amp;gt; nat &amp;gt; filter，raw的最高。'><title>Iptables简介</title>
 
 <link rel='canonical' href='https://blog.zooter.com.cn/posts/iptables%E7%AE%80%E4%BB%8B/'>
 
 <link rel="stylesheet" href="/scss/style.min.dedb39d9f8ace1743cfa8343d6a5829b27e5a3839c1a7533e656218fc7b486c6.css"><meta property='og:title' content='Iptables简介'>
-<meta property='og:description' content='一、iptables iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。
+<meta property='og:description' content='iptables简介 1. iptables iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。
 通常来说iptables仅用于处理IPv4数据包，对于IPv6需要使用ip6tables命令。
-二、netfilter netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。
+2. netfilter netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。
 我们可以使用用户空间中的iptables、nftables、ebtables和arptables等软件来控制netfilter，进而管理通过本系统的数据包。
-三、基础 iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。
+3. 基本概念 iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。
 协议可以查看/etc/protocols/中定义的协议类型，可使用名字(不区分大小写)、对应编号。缺省值为0，代表tcp、udp、icmp而不是定义的所有协议类型。
-1.五链 五链就是指图中的：prerouting、input、forward、postrouting、output五种数据包动作。 例如：
- 到本机某进程的数据包：prerouting、input 进过本机转发的数据包：prerouting、forward、postrouting 本机发出的数据包：output、postrouting  2.四表 iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：
- filter：过滤数据包。内核模块：iptables_filter nat：网络地址转换。内核模块：iptable_nat mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw  3.链和表的关系 不同表能作用的链的关系如表：
+3.1. 五链 五链就是指图中的：prerouting、input、forward、postrouting、output五种数据包动作。 例如：
+ 到本机某进程的数据包：prerouting、input 进过本机转发的数据包：prerouting、forward、postrouting 本机发出的数据包：output、postrouting  3.2. 四表 iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：
+ filter：过滤数据包。内核模块：iptables_filter nat：网络地址转换。内核模块：iptable_nat mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw  3.3. 链和表的关系 不同表能作用的链的关系如表：
    四表/五链 PREROUTING INPUT FORWARD OUTPUT POSTROUTING     filter  √ √ √    nat √ √(centos7)  √ √   mangle √ √ √ √ √   raw √   √     表的优先级关系：raw &amp;gt; mangle &amp;gt; nat &amp;gt; filter，raw的最高。'>
 <meta property='og:url' content='https://blog.zooter.com.cn/posts/iptables%E7%AE%80%E4%BB%8B/'>
 <meta property='og:site_name' content='新泽雪冬'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='linux' /><meta property='article:tag' content='网络' /><meta property='article:published_time' content='2022-03-16T19:46:25-07:00'/><meta property='article:modified_time' content='2022-03-16T19:46:25-07:00'/><meta property='og:image' content='https://blog.zooter.com.cn/img/bg.jpg' />
 <meta name="twitter:title" content="Iptables简介">
-<meta name="twitter:description" content="一、iptables iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。
+<meta name="twitter:description" content="iptables简介 1. iptables iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。
 通常来说iptables仅用于处理IPv4数据包，对于IPv6需要使用ip6tables命令。
-二、netfilter netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。
+2. netfilter netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。
 我们可以使用用户空间中的iptables、nftables、ebtables和arptables等软件来控制netfilter，进而管理通过本系统的数据包。
-三、基础 iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。
+3. 基本概念 iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。
 协议可以查看/etc/protocols/中定义的协议类型，可使用名字(不区分大小写)、对应编号。缺省值为0，代表tcp、udp、icmp而不是定义的所有协议类型。
-1.五链 五链就是指图中的：prerouting、input、forward、postrouting、output五种数据包动作。 例如：
- 到本机某进程的数据包：prerouting、input 进过本机转发的数据包：prerouting、forward、postrouting 本机发出的数据包：output、postrouting  2.四表 iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：
- filter：过滤数据包。内核模块：iptables_filter nat：网络地址转换。内核模块：iptable_nat mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw  3.链和表的关系 不同表能作用的链的关系如表：
+3.1. 五链 五链就是指图中的：prerouting、input、forward、postrouting、output五种数据包动作。 例如：
+ 到本机某进程的数据包：prerouting、input 进过本机转发的数据包：prerouting、forward、postrouting 本机发出的数据包：output、postrouting  3.2. 四表 iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：
+ filter：过滤数据包。内核模块：iptables_filter nat：网络地址转换。内核模块：iptable_nat mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw  3.3. 链和表的关系 不同表能作用的链的关系如表：
    四表/五链 PREROUTING INPUT FORWARD OUTPUT POSTROUTING     filter  √ √ √    nat √ √(centos7)  √ √   mangle √ √ √ √ √   raw √   √     表的优先级关系：raw &amp;gt; mangle &amp;gt; nat &amp;gt; filter，raw的最高。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://blog.zooter.com.cn/img/bg.jpg' />
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130410247-1"></script>
@@ -279,16 +279,17 @@
     <section class="article-content">
     
     
-    <h2 id="一iptables">一、iptables</h2>
+    <h1 id="iptables简介">iptables简介</h1>
+<h2 id="1-iptables">1. iptables</h2>
 <p>iptables是运行在用户空间的软件，通过控制内核中的netfilter模块来实现对网络的管理。实际上我们只是通过iptables来对内核中的netfilter的规则进行修改，netfilter才是实际工作的模块。</p>
 <p>通常来说iptables仅用于处理IPv4数据包，对于IPv6需要使用ip6tables命令。</p>
-<h2 id="二netfilter">二、netfilter</h2>
+<h2 id="2-netfilter">2. netfilter</h2>
 <p>netfilter是在linux内核中的一个软件框架，用于管理网络数据包。有：网络地址转换、数据包修改、数据包过滤、防火墙等功能。</p>
 <p>我们可以使用用户空间中的iptables、nftables、ebtables和arptables等软件来控制netfilter，进而管理通过本系统的数据包。</p>
-<h2 id="三基础">三、基础</h2>
+<h2 id="3-基本概念">3. 基本概念</h2>
 <p>iptables根据规则来对数据包进行管理，一条规则包含：动作、源地址、目的地址、协议等信息。</p>
 <p>协议可以查看<code>/etc/protocols/</code>中定义的协议类型，可使用名字(不区分大小写)、对应编号。缺省值为0，代表tcp、udp、icmp而不是定义的所有协议类型。</p>
-<h3 id="1五链">1.五链</h3>
+<h3 id="31-五链">3.1. 五链</h3>
 <p><img src="/posts/iptables%E7%AE%80%E4%BB%8B/6b25093691631632e406caa95efc2073.png"
 	width="879"
 	height="503"
@@ -310,7 +311,7 @@
 <li>进过本机转发的数据包：prerouting、forward、postrouting</li>
 <li>本机发出的数据包：output、postrouting</li>
 </ol>
-<h3 id="2四表">2.四表</h3>
+<h3 id="32-四表">3.2. 四表</h3>
 <p>iptables把功能相似的规则放在同一张表中，默认为我们创建了四张表：</p>
 <ul>
 <li>filter：过滤数据包。内核模块：iptables_filter</li>
@@ -318,7 +319,7 @@
 <li>mangle：拆解、修改、重新发送数据包。内核模块：iptable_mangle</li>
 <li>raw：决定数据包是否被状态跟踪机制处理。内核模块：iptable_raw</li>
 </ul>
-<h3 id="3链和表的关系">3.链和表的关系</h3>
+<h3 id="33-链和表的关系">3.3. 链和表的关系</h3>
 <p>不同表能作用的链的关系如表：</p>
 <div class="table-wrapper"><table>
 <thead>
@@ -395,9 +396,9 @@
 		data-flex-basis="141px"
 	
 ></p>
-<h2 id="四规则">四、规则</h2>
+<h2 id="4-规则">4. 规则</h2>
 <p>规则是根据指定的匹配条件来尝试匹配每个流经此处的报文，一旦匹配成功，则由规则后面指定的处理动作进行处理。</p>
-<h3 id="1-匹配条件">1. 匹配条件</h3>
+<h3 id="41-匹配条件">4.1. 匹配条件</h3>
 <p>匹配条件分为基本匹配条件与扩展匹配条件：</p>
 <ul>
 <li>基本匹配条件：
@@ -407,7 +408,7 @@
 除了上述的条件可以用于匹配，还有很多其他的条件可以用于匹配，这些条件泛称为扩展条件，这些扩展条件其实也是netfilter中的一部分，只是以模块的形式存在，如果想要使用这些条件，则需要依赖对应的扩展模块。</li>
 </ul>
 <p>下面仅列出常用的简单匹配规则。</p>
-<h4 id="11-ip地址匹配">1.1 IP地址匹配</h4>
+<h4 id="411-ip地址匹配">4.1.1 IP地址匹配</h4>
 <p>我们可以使用<code>-s</code>和<code>-d</code>指定匹配源IP和目的IP，还可以使用<code>!</code>来表示取反，多个规则时使用<code>,</code>号隔开。例如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -443,7 +444,7 @@
 </span></span><span class="line"><span class="cl">iptables -I INPUT -s 1.1.1.7 -d 1.1.1.8 -j DROP
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="12-协议匹配">1.2 协议匹配</h4>
+</div><h4 id="412-协议匹配">4.1.2 协议匹配</h4>
 <p>我们可以使用<code>-p</code>指定匹配的协议，可使用协议名称(不区分大小写)，或对应编号。支持协议可查看<code>/etc/protocols</code>中的内容，也可以查看相关<a class="link" href="https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml"  target="_blank" rel="noopener"
     >RFC文档定义的协议和对应编号</a>。</p>
 <p>在指定IP地址匹配的同时可指定具体协议，例如：</p>
@@ -457,9 +458,9 @@
 </span></span><span class="line"><span class="cl">iptables -I INPUT -s 1.1.1.2 -p icmp -j DROP
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="13-接口匹配">1.3 接口匹配</h4>
+</div><h4 id="413-接口匹配">4.1.3 接口匹配</h4>
 <p>我们还可以使用<code>-i</code>和<code>-o</code>参数根据流入和流出的接口来匹配。<code>-i</code>匹配流入的网卡，作用于PREROUTING、INPUT、FORWARD；<code>-o</code>匹配流出的网卡，作用于FORWARD、OUTPUT、POSTROUTING。</p>
-<h4 id="14-端口匹配">1.4 端口匹配</h4>
+<h4 id="414-端口匹配">4.1.4 端口匹配</h4>
 <p>端口匹配属于扩展匹配条件，需要依赖扩展模块。</p>
 <ol>
 <li>
@@ -489,7 +490,7 @@
 </div>
 </div></li>
 </ol>
-<h3 id="2-处理动作">2. 处理动作</h3>
+<h3 id="42-处理动作">4.2. 处理动作</h3>
 <p>处理动作在iptables中被称为target（这样说并不准确，我们暂且这样称呼），动作也可以分为基本动作和扩展动作。
 此处列出一些常用的动作，之后的文章会对它们进行详细的示例与总结：</p>
 <ul>
@@ -520,7 +521,7 @@
 </li>
 </ul>
 <p>补充一下DROP和REJECT的区别。DROP是直接把匹配到的报文丢弃，REJECT除了把报文丢弃还会给该报文中的源IP发一个ICMP报文说明目的不可达(直接回复不可达, 更强硬)。前者报文发送方只能等超时，而后者发送方因为收到了ICMP不可达所以马上就给出了提示。</p>
-<h2 id="五命令使用">五、命令使用</h2>
+<h2 id="5-命令使用">5. 命令使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -663,7 +664,7 @@
 </span></span><span class="line"><span class="cl"><span class="o">[</span>!<span class="o">]</span> --version -V    print package version.
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="六filter表实践">六、filter表实践</h2>
+</div><h2 id="6-filter表实践">6. filter表实践</h2>
 <p>filter是负责数据包过滤的表，是我们最常用的表。</p>
 <p>首先查看filter表中原有的规则：</p>
 <div class="highlight"><div class="chroma">
@@ -1028,30 +1029,30 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#一iptables">一、iptables</a></li>
-    <li><a href="#二netfilter">二、netfilter</a></li>
-    <li><a href="#三基础">三、基础</a>
+    <li><a href="#1-iptables">1. iptables</a></li>
+    <li><a href="#2-netfilter">2. netfilter</a></li>
+    <li><a href="#3-基本概念">3. 基本概念</a>
       <ol>
-        <li><a href="#1五链">1.五链</a></li>
-        <li><a href="#2四表">2.四表</a></li>
-        <li><a href="#3链和表的关系">3.链和表的关系</a></li>
+        <li><a href="#31-五链">3.1. 五链</a></li>
+        <li><a href="#32-四表">3.2. 四表</a></li>
+        <li><a href="#33-链和表的关系">3.3. 链和表的关系</a></li>
       </ol>
     </li>
-    <li><a href="#四规则">四、规则</a>
+    <li><a href="#4-规则">4. 规则</a>
       <ol>
-        <li><a href="#1-匹配条件">1. 匹配条件</a>
+        <li><a href="#41-匹配条件">4.1. 匹配条件</a>
           <ol>
-            <li><a href="#11-ip地址匹配">1.1 IP地址匹配</a></li>
-            <li><a href="#12-协议匹配">1.2 协议匹配</a></li>
-            <li><a href="#13-接口匹配">1.3 接口匹配</a></li>
-            <li><a href="#14-端口匹配">1.4 端口匹配</a></li>
+            <li><a href="#411-ip地址匹配">4.1.1 IP地址匹配</a></li>
+            <li><a href="#412-协议匹配">4.1.2 协议匹配</a></li>
+            <li><a href="#413-接口匹配">4.1.3 接口匹配</a></li>
+            <li><a href="#414-端口匹配">4.1.4 端口匹配</a></li>
           </ol>
         </li>
-        <li><a href="#2-处理动作">2. 处理动作</a></li>
+        <li><a href="#42-处理动作">4.2. 处理动作</a></li>
       </ol>
     </li>
-    <li><a href="#五命令使用">五、命令使用</a></li>
-    <li><a href="#六filter表实践">六、filter表实践</a></li>
+    <li><a href="#5-命令使用">5. 命令使用</a></li>
+    <li><a href="#6-filter表实践">6. filter表实践</a></li>
   </ol>
 </nav>
         </div>
