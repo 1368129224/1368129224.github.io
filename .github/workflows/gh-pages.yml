@@ -15,11 +15,12 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Seyup node
+    - name: Seyup-node
     - uses: actions/setup-node@v3
       with:
         node-version: 18
         cache: 'yarn'
+
     - run: yarn init
     - run: yarn add -D vuepress@next
     - run: yarn install --frozen-lockfile
