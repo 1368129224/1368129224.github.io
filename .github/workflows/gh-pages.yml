@@ -19,8 +19,7 @@ jobs:
         node-version: 18
         cache: 'npm'
     - run: npm ci
-    - run: npm test
-
+    - run: npm run docs:dev
     - run: cp CNAME docs/.vuepress/dist/
 
     - name: Deploy
