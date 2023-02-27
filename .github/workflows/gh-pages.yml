@@ -18,7 +18,7 @@ jobs:
       with:
         node-version: 18
         cache: 'yarn'
-    - run: npm ci
+
     - run: yarn install --frozen-lockfile
     - run: yarn docs:dev
     - run: cp CNAME docs/.vuepress/dist/
