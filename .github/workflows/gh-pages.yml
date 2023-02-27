@@ -15,9 +15,9 @@ jobs:
       with:
         fetch-depth: 0
 
-    - run: npm ci
-    - run: npm install vuepress
-    - run: npm run build
+    - run: npm init
+    - run: npm install -D vuepress@next
+    - run: npm run docs:dev
     - run: cp CNAME docs/.vuepress/dist/
 
     - name: Deploy
