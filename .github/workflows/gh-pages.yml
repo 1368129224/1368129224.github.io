@@ -15,9 +15,21 @@ jobs:
       with:
         fetch-depth: 0
 
-    - run: npm init
-    - run: npm install -D vuepress@next
-    - run: npm run docs:dev
+    - name: setup node
+      uses: actions/checkout@v3
+
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+    - uses: actions/cache@v3
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
     - run: cp CNAME docs/.vuepress/dist/
 
     - name: Deploy
