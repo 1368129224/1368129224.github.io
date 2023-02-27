@@ -19,8 +19,8 @@ jobs:
         node-version: 18
         cache: 'yarn'
     # - run: yarn init
-    - run: yarn test
-    # - run: yarn add -D vuepress@next
+    # - run: yarn test
+    - run: yarn add -D vuepress@next
     # # - run: yarn install --frozen-lockfile
     # - run: yarn vuepress build docs
 
