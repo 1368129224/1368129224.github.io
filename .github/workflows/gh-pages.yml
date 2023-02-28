@@ -20,7 +20,7 @@ jobs:
         cache: 'yarn'
 
     - run: yarn install --frozen-lockfile
-    - run: yarn docs:dev
+    - run: yarn docs:build
     - run: cp CNAME docs/.vuepress/dist/
 
     - name: Deploy
