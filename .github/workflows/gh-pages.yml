@@ -21,6 +21,7 @@ jobs:
 
     - run: yarn install --frozen-lockfile
     - run: yarn docs:build
+    - run: ls -a docs/.vuepress/dist/
     - run: cp CNAME docs/.vuepress/dist/
     - run: ls -a docs/.vuepress/dist/
 
