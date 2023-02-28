@@ -22,6 +22,7 @@ jobs:
     - run: yarn install --frozen-lockfile
     - run: yarn docs:build
     - run: cp CNAME docs/.vuepress/dist/
+    - run: ls -a docs/.vuepress/dist/
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
