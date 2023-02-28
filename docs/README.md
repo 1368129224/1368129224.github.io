@@ -2,10 +2,10 @@
 home: true
 layout: BlogHome
 icon: home
-title: 博客主页
+title: 主页
 heroImage: /logo.svg
-heroText: 你博客的名称
-heroFullScreen: true
+heroText: zooter's blog
+# heroFullScreen: true
 tagline: 你可以在这里放置你的口号与标语
 projects:
   - icon: project
