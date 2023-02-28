@@ -1,33 +1,33 @@
-name: GitHub Pages
+# name: GitHub Pages
 
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+# on:
+#   push:
+#     branches: [main]
+#   workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+#     steps:
+#     - uses: actions/checkout@v3
+#       with:
+#         fetch-depth: 0
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-        cache: 'yarn'
+#     - uses: actions/setup-node@v3
+#       with:
+#         node-version: 18
+#         cache: 'yarn'
 
-    - run: yarn install --frozen-lockfile
-    - run: yarn docs:build
-    - run: touch docs/.vuepress/dist/.nojekyll
-    - run: ls -a docs/.vuepress/dist/
+#     - run: yarn install --frozen-lockfile
+#     - run: yarn docs:build
+#     - run: touch docs/.vuepress/dist/.nojekyll
+#     - run: ls -a docs/.vuepress/dist/
 
-    - name: Deploy to GitHub Pages
-      uses: crazy-max/ghaction-github-pages@v2
-      with:
-        target_branch: gh-pages
-        build_dir: docs/.vuepress/dist
-      env:
-        GH_PAT: ${{ secrets.PERSONAL_TOKEN }}
+#     - name: Deploy to GitHub Pages
+#       uses: crazy-max/ghaction-github-pages@v2
+#       with:
+#         target_branch: gh-pages
+#         build_dir: docs/.vuepress/dist
+#       env:
+#         GH_PAT: ${{ secrets.PERSONAL_TOKEN }}
