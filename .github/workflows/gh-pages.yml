@@ -2,8 +2,8 @@ name: GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -28,5 +28,5 @@ jobs:
       with:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         publish_branch: gh-pages
-        publish_dir: ./.vuepress/dist
+        publish_dir: docs/.vuepress/dist
         allow_empty_commit: true
