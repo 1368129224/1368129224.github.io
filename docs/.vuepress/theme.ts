@@ -3,11 +3,11 @@ import { Navbar } from "./navbar/index.js";
 import { Sidebar } from "./sidebar/index.js";
 
 export default hopeTheme({
-  hostname: "https://mister-hope.github.io",
+  hostname: "https://1368129224.github.io",
 
   author: {
-    name: "Mr.Hope",
-    url: "https://mrhope.site",
+    name: "zooter",
+    url: "https://1368129224.github.io",
   },
 
   iconAssets: "iconfont",
@@ -63,10 +63,8 @@ export default hopeTheme({
      * Chinese locale config
      */
     "/": {
-      // navbar
       navbar: Navbar,
 
-      // sidebar
       sidebar: Sidebar,
 
       footer: "默认页脚",
@@ -78,7 +76,6 @@ export default hopeTheme({
         intro: "/intro.html",
       },
 
-      // page meta
       metaLocales: {
         editLink: "在 GitHub 上编辑此页",
       },
@@ -98,7 +95,9 @@ export default hopeTheme({
       provider: "Waline",
 
       // waline 模式下
-      serverURL: "https://blog-kmxftimc0-zooter.vercel.app", // your serverURL
+      serverURL: "https://blog-kmxftimc0-zooter.vercel.app",
+      dark: "auto",
+      requiredMeta: ['nick'],
     },
 
     // all features are enabled for demo, only preserve features you need here
