@@ -95,11 +95,10 @@ export default hopeTheme({
     blog: true,
 
     comment: {
-      // @ts-expect-error: You should generate and use your own comment service
       provider: "Waline",
 
       // waline 模式下
-      serverURL: "https://1368129224-github-io.vercel.app/", // your serverURL
+      serverURL: "https://blog-kmxftimc0-zooter.vercel.app", // your serverURL
     },
 
     // all features are enabled for demo, only preserve features you need here
