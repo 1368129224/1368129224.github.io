@@ -5,7 +5,7 @@ icon: home
 title: 主页
 heroImage: /logo.svg
 heroText: zooter's blog
-# heroFullScreen: true
+heroFullScreen: false
 tagline: 你可以在这里放置你的口号与标语
 projects:
   - icon: project
