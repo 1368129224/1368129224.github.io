@@ -1,3 +1,10 @@
+---
+title: 读书记录 & 简评
+index: false
+icon: discover
+category:
+  - 日常
+---
 # 读书记录 & 简评
 
 按时间从近到远记录读过的书，简评及评分：

@@ -1,3 +1,10 @@
+---
+title: DIY NAS记录
+index: false
+icon: discover
+category:
+  - 日常
+---
 # DIY NAS记录
 
 ## 为什么需要NAS

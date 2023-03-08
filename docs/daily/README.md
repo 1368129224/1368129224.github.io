@@ -3,7 +3,7 @@ title: 日常碎碎念
 index: false
 icon: discover
 category:
-  - 使用指南
+  - 日常
 ---
 
 ## 目录
